@@ -2,7 +2,7 @@
 
 - [ ] 0단계 - 스레드 이해하기
   - 아래를 순서대로 통과시킨다
-    - [ ] ThreadTest
+    - [x] ThreadTest
     - [ ] SynchronizationTest
     - [ ] ThreadPoolsTest
 

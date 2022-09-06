@@ -1,5 +1,6 @@
 package concurrency.stage0;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +16,9 @@ import org.slf4j.LoggerFactory;
  * Defining and Starting a Thread
  * https://docs.oracle.com/javase/tutorial/essential/concurrency/runthread.html
  */
-class ThreadTest {
+class N1_ThreadTest {
 
-    private static final Logger log = LoggerFactory.getLogger(ThreadTest.class);
+    private static final Logger log = LoggerFactory.getLogger(N1_ThreadTest.class);
 
     /**
      * 자바에서 직접 스레드를 만드는 방법은 2가지가 있다.
@@ -50,6 +51,44 @@ class ThreadTest {
 
         // thread의 작업이 완료될 때까지 기다린다.
          thread.join();
+    }
+
+    @DisplayName("Thread 인스턴스 변수 확인")
+    @Test
+    void test_instance() throws InterruptedException {
+        CustomThread thA = new CustomThread("thread-A");
+        CustomThread thB = new CustomThread("thread-B");
+
+        thA.run();
+        thB.run();
+
+        thA.addVal();
+        thA.addVal();
+
+        thB.addVal();
+
+        thA.join();
+        thB.join();
+    }
+
+    private static final class CustomThread extends Thread {
+
+        private String message;
+        private int val = 0;
+
+        public CustomThread(final String message) {
+            this.message = message;
+        }
+
+        @Override
+        public void run() {
+            log.info(message);
+        }
+
+        public void addVal() {
+            val++;
+            log.info("val = {}", val);
+        }
     }
 
     private static final class ExtendedThread extends Thread {
