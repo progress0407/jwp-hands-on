@@ -23,8 +23,8 @@ class ConcurrencyTest {
 
         // 웹서버로 동시에 2명의 유저가 gugu라는 이름으로 가입을 시도했다.
         // UserServlet의 users에 이미 가입된 회원이 있으면 중복 가입할 수 없도록 코드를 작성했다.
-        final var firstThread = new Thread(new HttpProcessor(new User("gugu"), userServlet));
-        final var secondThread = new Thread(new HttpProcessor(new User("gugu"), userServlet));
+        final Thread firstThread = new Thread(new HttpProcessor(new User("gugu"), userServlet));
+        final Thread secondThread = new Thread(new HttpProcessor(new User("gugu"), userServlet));
 
         // 스레드는 실행 순서가 정해져 있지 않다.
         // firstThread보다 늦게 시작한 secondThread가 먼저 실행될 수도 있다.
@@ -37,4 +37,15 @@ class ConcurrencyTest {
         // 하지만 디버거로 개별 스레드를 일시 중지하면 if절 조건이 true가 되고 크기가 2가 된다. 왜 그럴까?
         assertThat(userServlet.getUsers()).hasSize(1);
     }
+
+    /**
+     * 해설 !
+     *
+     * 쓰레드 모드로 디버깅을 하는 순간 #2에 도달하는 첫번째 쓰레드를 포획한다.
+     * 이 쓰레드를 Th-A라고 하고 나머지 한 쓰레드를 Th-B라고 했을때,
+     * Th-A는 디버거로 찍었기 때문에 사람이 기다리는 만큼 기다리게 된다.
+     * 이때 Th-A에서 찍은 user는 아직 add가 되지 않았기 때문에 Th-B가 바라보는 users에는 user가 없다.
+     * 따라서 이경우 Th-B는 user를 add하게 된다.
+     * Th-A는 유효성 검증을 이미 통과하였기 때문에 결국에는 user를 등록하게 된다
+     */
 }
