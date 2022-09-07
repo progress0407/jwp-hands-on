@@ -1,5 +1,6 @@
-package concurrency.stage2;
+package concurrency.stage2.controller;
 
+import concurrency.stage2.HelloWorldService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,19 @@
+# hand-on
+
+#server:
+#  tomcat:
+#    min-spare: 1
+#    accept-count: 1
+#    max-connections: 3
+#    threads:
+#      max: 2
+
+# sihyung92 velog
+
 server:
   tomcat:
-    min-spare: 1
-    accept-count: 1
-    max-connections: 3
     threads:
       max: 2
+      min-spare: 2
+    accept-count: 1
+  port: 5000
