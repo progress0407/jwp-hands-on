@@ -44,11 +44,11 @@ class N2_SynchronizationTest {
         /**
          * 메서드에 선언
          */
-//        public synchronized void calculate() {
-//            synchronized (this) {
-//                setSum(getSum() + 1);
-//            }
-//        }
+        public synchronized void calculate() {
+            synchronized (this) {
+                setSum(getSum() + 1);
+            }
+        }
 
         /**
          * 메서드의 특정 구간에 대해서만 설정
@@ -64,12 +64,12 @@ class N2_SynchronizationTest {
          * 메서드의 특정
          * 일반적으로는 별도의 객체를 선언해서 lock
          */
-        Object lock = new Object();
-        public void calculate() {
-            synchronized (lock) {
-                setSum(getSum() + 1);
-            }
-        }
+//        Object lock = new Object();
+//        public void calculate() {
+//            synchronized (lock) {
+//                setSum(getSum() + 1);
+//            }
+//        }
 
         public int getSum() {
             return sum;

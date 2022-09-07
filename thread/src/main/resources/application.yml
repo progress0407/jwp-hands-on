@@ -1,6 +1,7 @@
 server:
   tomcat:
+    min-spare: 1
     accept-count: 1
-    max-connections: 1
+    max-connections: 3
     threads:
       max: 2
