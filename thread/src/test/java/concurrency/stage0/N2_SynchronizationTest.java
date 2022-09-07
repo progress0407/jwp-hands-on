@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Synchronization
  * https://docs.oracle.com/javase/tutorial/essential/concurrency/sync.html
  */
-class SynchronizationTest {
+class N2_SynchronizationTest {
 
     /**
      * 테스트가 성공하도록 SynchronizedMethods 클래스에 동기화를 적용해보자.
@@ -41,9 +41,35 @@ class SynchronizationTest {
 
         private int sum = 0;
 
-        public void calculate() {
-            setSum(getSum() + 1);
+        /**
+         * 메서드에 선언
+         */
+        public synchronized void calculate() {
+            synchronized (this) {
+                setSum(getSum() + 1);
+            }
         }
+
+        /**
+         * 메서드의 특정 구간에 대해서만 설정
+         * this로 lock
+         */
+//        public void calculate() {
+//            synchronized (this) {
+//                setSum(getSum() + 1);
+//            }
+//        }
+
+        /**
+         * 메서드의 특정
+         * 일반적으로는 별도의 객체를 선언해서 lock
+         */
+//        Object lock = new Object();
+//        public void calculate() {
+//            synchronized (lock) {
+//                setSum(getSum() + 1);
+//            }
+//        }
 
         public int getSum() {
             return sum;

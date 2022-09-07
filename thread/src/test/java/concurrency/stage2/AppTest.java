@@ -1,13 +1,18 @@
 package concurrency.stage2;
 
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
 import java.net.http.HttpResponse;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AppTest {
+
+    private static final Logger log = LoggerFactory.getLogger(AppTest.class);
 
     private static final AtomicInteger count = new AtomicInteger(0);
 
@@ -16,10 +21,10 @@ class AppTest {
      * 2. 아래 테스트를 실행시킨다.
      * 3. AppTest가 아닌 App의 콘솔에서 SampleController가 생성한 http call count 로그를 확인한다.
      * 4. application.yml에서 설정값을 변경해보면서 어떤 차이점이 있는지 분석해본다.
-     * - 로그가 찍힌 시간
-     * - 스레드명(nio-8080-exec-x)으로 생성된 스레드 갯수를 파악
-     * - http call count
-     * - 테스트 결과값
+     *   - 로그가 찍힌 시간
+     *   - 스레드명(nio-8080-exec-x)으로 생성된 스레드 갯수를 파악
+     *   - http call count
+     *   - 테스트 결과값
      */
     @Test
     void test() throws Exception {
@@ -32,6 +37,8 @@ class AppTest {
 
         for (final var thread : threads) {
             thread.start();
+            final LocalDateTime now = LocalDateTime.now();
+            log.info("[{}] thread started ! {}", now, thread.getName());
             Thread.sleep(50);
         }
 
