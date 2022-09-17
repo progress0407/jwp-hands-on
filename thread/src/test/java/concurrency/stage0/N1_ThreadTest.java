@@ -71,6 +71,42 @@ class N1_ThreadTest {
         thB.join();
     }
 
+    @Test
+    void test_0() throws InterruptedException {
+        log.info("main flow start");
+        final Thread thA = new Thread(()->{
+            log.info("th-A start - end");
+        }, "th-A");
+
+        final Thread thB = new Thread(()->{
+            log.info("th-B start");
+            sleep(1000);
+            log.info("th-B end");
+        }, "th-B");
+
+//        thA.setDaemon(true);
+//        thB.setDaemon(true);
+
+        thA.start();
+        thB.start();
+
+        thA.join();
+        thB.join();
+
+       log.info("main flow end");
+        System.out.println();
+    }
+
+    private void sleep(final int millis) {
+        try {
+            log.info("sleep start ! {}", Thread.currentThread().getName());
+            Thread.sleep(millis);
+            log.info("sleep end ! {}", Thread.currentThread().getName());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private static final class CustomThread extends Thread {
 
         private String message;
