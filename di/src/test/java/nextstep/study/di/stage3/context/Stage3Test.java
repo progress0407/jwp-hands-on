@@ -1,5 +1,6 @@
 package nextstep.study.di.stage3.context;
 
+import java.util.Set;
 import nextstep.study.User;
 import org.junit.jupiter.api.Test;
 
@@ -13,18 +14,19 @@ class Stage3Test {
     void stage3() {
         final var user = new User(1L, "gugu");
 
-        final var diContext = createDIContext();
-        final var userService = diContext.getBean(UserService.class);
+        final DIContext diContext = createDIContext();
+        final UserService userService = diContext.getBean(UserService.class);
 
-        final var actual = userService.join(user);
+        final User actual = userService.join(user);
 
         assertThat(actual.getAccount()).isEqualTo("gugu");
     }
 
     private static DIContext createDIContext() {
-        var classes = new HashSet<Class<?>>();
+        Set<Class<?>> classes = new HashSet<>();
         classes.add(InMemoryUserDao.class);
         classes.add(UserService.class);
-        return new DIContext(classes);
+        classes.add(UserController.class);
+        return new DIContext("nextstep.study.di.stage3.context", classes);
     }
 }

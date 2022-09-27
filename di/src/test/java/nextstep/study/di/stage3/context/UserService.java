@@ -4,6 +4,7 @@ import nextstep.study.User;
 
 class UserService {
 
+
     private UserDao userDao;
 
     public UserService(final UserDao userDao) {
@@ -14,6 +15,4 @@ class UserService {
         userDao.insert(user);
         return userDao.findById(user.getId());
     }
-
-    private UserService() {}
 }
