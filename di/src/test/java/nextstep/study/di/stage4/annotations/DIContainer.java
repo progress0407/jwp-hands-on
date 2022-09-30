@@ -14,11 +14,11 @@ import org.reflections.Reflections;
  */
 class DIContext {
 
-    private final Map<Class<?>, Object> peanuts;
+    private final Map<Class<?>, Object> peanutsCache;
     private static Reflections reflections;
 
     public DIContext(final Set<Class<?>> classes) {
-        peanuts = new HashMap();
+        peanutsCache = new HashMap();
         try {
             initInternal(classes);
         } catch (Exception e) {
@@ -35,7 +35,7 @@ class DIContext {
             final PeanutInnerDto peanutInnerDto = dfs(peanutType);
             final Class<?> type = peanutInnerDto.type;
             final Object newInstance = peanutInnerDto.newInstance;
-            peanuts.putIfAbsent(type, newInstance);
+            peanutsCache.putIfAbsent(type, newInstance);
         }
     }
 
@@ -53,7 +53,7 @@ class DIContext {
     private PeanutInnerDto dfs(final Class<?> type) throws Exception {
         /** 이미 있는 경우 */
         if (isAlreadyExistPeanut(type)) {
-            return new PeanutInnerDto(peanuts.get(type));
+            return new PeanutInnerDto(peanutsCache.get(type));
         }
 
         /** 인터페이스인 경우 */
@@ -137,7 +137,7 @@ class DIContext {
     }
 
     private boolean isAlreadyExistPeanut(final Class<?> type) {
-        return this.peanuts.get(type) != null;
+        return this.peanutsCache.get(type) != null;
     }
 
     private Constructor<?> getDefaultConstructor(final Class<?> peanut) {
@@ -161,15 +161,15 @@ class DIContext {
         for (int i = 0; i < parameterTypes.length; i++) {
             final Class<?> parameterType = parameterTypes[i];
             final Object parameterInstance = dfs(parameterType);
-            peanuts.putIfAbsent(parameterType, parameterInstance);
+            peanutsCache.putIfAbsent(parameterType, parameterInstance);
             parameterInstances[i] = parameterInstance;
         }
         return parameterInstances;
     }
-
     private boolean hasDefaultConstructor(final Class<?> type) {
         return existDefaultConstructor(type) && !existInjectAnnotationAtField(type);
     }
+
 
     private boolean existDefaultConstructor(final Class<?> type) {
         try {
@@ -187,7 +187,7 @@ class DIContext {
 
     @SuppressWarnings("unchecked")
     public <T> T getPeanut(final Class<T> aClass) {
-        final T peanut = (T) peanuts.get(aClass);
+        final T peanut = (T) peanutsCache.get(aClass);
         if (peanut == null) {
             throw new IllegalArgumentException("bean이 존재하지 않습니다.");
         }
